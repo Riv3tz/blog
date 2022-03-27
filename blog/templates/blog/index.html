@@ -1,0 +1,54 @@
+<h1>Posts</h1>
+{% if user.get_username == "" %}
+<h5>Please <a href="/login">Login</a> or <a href="/register">Register</a> to create or edit posts</h5>
+{% else %}
+<h5>Logged in as - {{ user.get_username }}. Do you wish to <a href="/logout">Logout?</a></h5>
+<h4><a href="/create">Create New Post</a></h4>
+{% endif %}
+<hr>
+{% for p in posts %}
+    {% if p.is_published %}
+
+    <h1>{{p.title}}</h1>
+    <h3>By {{p.owner}}</h3>
+    <h6>{{p.created_at}}</h6>
+
+{% if request.user == p.owner %}
+    <span>
+        <a href="{% url 'post-detail' p.id %}">View / Edit</a>
+        <a href="{% url 'post-delete' p.id %}">Delete</a>
+    </span>
+{% else %}
+<span>
+    <a href="{% url 'post-detail' p.id %}">View</a>
+</span>
+{% endif %}
+    <hr>
+    {% endif %}
+{% endfor %}
+
+
+
+{% if   not user.get_username == "" %}
+<h1>Your unpublished posts -</h1>
+{% for p in posts %}
+    {% if not p.is_published and request.user == p.owner %}
+
+    <h1>{{p.title}}</h1>
+    <h3>By {{p.owner}}</h3>
+    <h6>{{p.created_at}}</h6>
+
+{% if request.user == p.owner %}
+    <span>
+        <a href="{% url 'post-detail' p.id %}">View / Edit</a>
+        <a href="{% url 'post-delete' p.id %}">Delete</a>
+    </span>
+{% else %}
+<span>
+    <a href="{% url 'post-detail' p.id %}">View</a>
+</span>
+{% endif %}
+    <hr>
+    {% endif %}
+{% endfor %}
+{% endif %}

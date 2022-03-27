@@ -1,0 +1,17 @@
+<h1>Post Detail</h1>
+<h1>{{post.title}}</h1>
+<h3>{{post.content}}</h3>
+<h6>Created at : {{post.created_at}}</h6>
+<h5>Owner : {{post.owner}}</h5>
+
+{% load rest_framework %}
+
+{% if request.user == post.owner %}
+
+<form action="{% url 'post-detail' pk=post.pk %}" method="POST">
+    {% csrf_token %}
+    {% render_form serializer %}
+    <input type="submit" value="Save">
+</form>
+
+{% endif %}
